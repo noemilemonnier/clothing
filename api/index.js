@@ -4,6 +4,7 @@
 import axios from 'axios'
 
 let set_manufacturers = new Set()
+
 async function  getJackets(){
     let jackets = []
     await axios.get("/api/products/jackets")
@@ -16,7 +17,7 @@ async function  getJackets(){
 }
 async function getShirts(){
     let shirts = []
-    axios.get(`/api/products/shirts`)
+    await axios.get(`/api/products/shirts`)
     .then(
         response =>{
             shirts = response.data
@@ -26,7 +27,7 @@ async function getShirts(){
 }
 async function  getAccessories(){
     let accessories = []
-    axios.get(`/api/products/accessories`)
+    await axios.get(`/api/products/accessories`)
     .then(
         response =>{
             accessories = response.data
