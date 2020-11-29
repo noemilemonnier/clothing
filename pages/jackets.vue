@@ -15,7 +15,7 @@
                 </v-row>
                 <v-card outlined>
                     <client-only>
-                        <v-data-table :headers="tableHeaders" :items="filteredJackets" :search="filters.search" :items-per-page="40">
+                        <v-data-table :headers="tableHeaders" :items="formattedJackets" :search="filters.search" :items-per-page="40">
                             <template v-slot:[`item.name`]="{ item }">
                                 {{ item.name }}
                             </template>
@@ -44,7 +44,9 @@
 <script>
 import axios from "axios";
 import { mdiCheckboxBlankOutline } from "@mdi/js";
+import apis from "~/api/index.js"
 const allText = "All";
+let set_manufacturers = new Set()
 
 export default {
     head: () => ({
@@ -70,15 +72,18 @@ export default {
     }),
     async mounted() {
         try {
-            axios
-                .get("/api/jackets")
+            let jacket_list = await apis.getJackets();
+            console.log(jacket_list)
+            /* await axios
+                .get("/api/products/jackets")
                 .then((response) => {
-                    this.jackets = response.data;
-                    console.log(this.jackets)
+                    this.jackets = response.data
+                    let mySet = new Set(this.jackets)
+                    console.log(this.set_manufacturers)
                 })
                 .catch((error) => {
                     console.error("There was an error in retrieving jackets!", error);
-                });
+                }); */
         } catch (err) {
             if (err.response) {
                 console.error("Could not fetch jackets");

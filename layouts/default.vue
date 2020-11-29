@@ -43,7 +43,7 @@
 <script>
 export default {
   data: () => ({
-    drawer: false,
+    sideNav: false,
     i: {},
   }),
   mounted() {

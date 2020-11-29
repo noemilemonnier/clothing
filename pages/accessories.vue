@@ -15,7 +15,7 @@
         </v-row>
         <v-card outlined>
           <client-only>
-            <v-data-table :headers="tableHeaders" :items="filteredAccessories" :search="filters.search" :items-per-page="40">
+            <v-data-table :headers="tableHeaders" :items="formattedAccessories" :search="filters.search" :items-per-page="40">
 <template v-slot:[`item.name`]="{ item }">
      {{ item.name }}
 </template>
@@ -71,7 +71,7 @@ export default {
     async mounted() {
         try {
             axios
-                .get("/api/accessories")
+                .get("/api/products/accessories")
                 .then((response) => {
                     this.accessories = response.data;
                     console.log(this.accessories)

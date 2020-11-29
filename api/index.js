@@ -3,30 +3,46 @@
 */
 import axios from 'axios'
 
-
-const api = axios.create({
-    baseURL: 'https://bad-api-assignment.reaktor.com',
-    headers: {
-        'Content-type': 'application/json'
+export let set_manufacturers = new Set()
+export async function getJackets(){
+    try{
+        await axios
+                .get("/api/products/jackets")
+                .then((response) => {
+                    let jackets = response.data
+                    return jackets
+                })
+                .catch((error) => {
+                    console.error("There was an error in retrieving jackets!", error);
+                });
+    }catch(error){
+        console.error("There was an error in retrieving jackets!", error);
     }
-})
-
-
-export const getDepartments = () => api.get(`/department`)
-export const getDepartmentByID = id => api.get(`/department/${id}`)
-export const getUnits = () => api.get(`/unit`)
-export const getUnitByID = id => api.get(`/unit/${id}`)
-export const getUnitsWithDistance = (lat, lon, radius) => api.get(`/unit/?distance=${radius}&lat=${lat}&lon=${lon}`)
-export const getUnitsAll = (lat, lon, radius, count) => api.get(`/unit/?distance=${radius}&lat=${lat}&lon=${lon}&page_size=${count}`)
-
-
+}
+export const getShirts = () => axios.get(`/api/products/shirts`)
+export const getAccessories = () => axios.get(`/api/products/shirts`)
+export const getAvailability = (manufacturer) => axios.get(`/api/availability/${manufacturer}`)
+export function getAllManufacturers(){
+    const jackets = getJackets()
+    for (var jacket in jackets) {
+        set_manufacturers.add(jacket.manufacturer)
+    }
+    const shirts = getShirts()
+    for (var shirt in shirts) {
+        set_manufacturers.add(shirt.manufacturer)
+    }
+    const accessories = getAccessories()
+    for (var accessory in accessories) {
+        set_manufacturers.add(accessory.manufacturer)
+    }
+    return set_manufacturers
+}
 const apis = {
-    getDepartments,
-    getDepartmentByID,
-    getUnits,
-    getUnitByID,
-    getUnitsWithDistance,
-    getUnitsAll
+    getAllManufacturers,
+    getJackets,
+    getShirts,
+    getAccessories,
+    getAvailability
 }
 
 export default apis
