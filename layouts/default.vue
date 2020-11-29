@@ -1,117 +1,62 @@
 <template>
-  <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
+  <v-app>
+    <v-navigation-drawer app temporary v-model="sideNav" >
+      <v-list dense flat nav>
+        <div class="text-center ma-3">
+          <nuxt-link to="/"><img src="/img/logo.png" contain width="110px" height="110px" alt="Clothing Warehouse"/> </nuxt-link>
+        </div>
+        <v-divider/>
+        <v-list-item class="mt-1" link nuxt to="/"><v-icon color="grey darken-2" size="28px">{{ $i.mdiHomeVariant }}</v-icon >&emsp;Home page</v-list-item>
+        <v-list-item class="mt-1" link nuxt to="/jackets"><v-icon size="28px">{{ $i.mdiLogin }}</v-icon>&emsp;Jackets</v-list-item>
+        <v-list-item class="mt-1" link nuxt to="/shirts"><v-icon size="28px">{{ $i.mdiLogin }}</v-icon>&emsp;Shirts</v-list-item>
+        <v-list-item class="mt-1" link nuxt to="/accessories"><v-icon size="28px">{{ $i.mdiLogin }}</v-icon>&emsp;Accessories</v-list-item>
+        <v-divider/>
       </v-list>
+      <template v-slot:append>
+				<v-list-item><v-spacer/><v-btn x-small class="white--text" text color="accent">Made by Noemi Lemonnier</v-btn><v-spacer/></v-list-item>
+			</template>
     </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
+
+    <v-app-bar app dense short>
+      <v-app-bar-nav-icon class="hidden-md-and-up" @click.stop="sideNav = !sideNav"></v-app-bar-nav-icon>
+        <v-toolbar-items class="hidden-sm-and-down">
+          <v-tab text nuxt to="/">Home page</v-tab>
+          <v-tab text nuxt to="/jackets">Jackets</v-tab>
+          <v-tab text nuxt to="/shirts">Shirts</v-tab>
+          <v-tab text nuxt to="/accessories">Accessories</v-tab>
+        </v-toolbar-items>
+      <v-spacer> </v-spacer>
+      <nuxt-link to="/" class="hidden-sm-and-down ml-5"><img src="/img/logo.png" contain width="45px" height="45px" alt="Aidline logo" /></nuxt-link>
+        <v-spacer> </v-spacer>
+        <v-btn icon color="secondary" @click.stop="onDarkModeToggled"><v-icon size="28px">{{ $i.mdiThemeLightDark }}</v-icon></v-btn>
     </v-app-bar>
+
     <v-main>
-      <v-container>
+      <v-container >
         <nuxt />
       </v-container>
     </v-main>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer
-      :absolute="!fixed"
-      app
-    >
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
+
   </v-app>
 </template>
 
 <script>
 export default {
-  data () {
-    return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        }
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
-    }
-  }
+  data: () => ({
+    drawer: false,
+    i: {},
+  }),
+  mounted() {
+    setTimeout(() => {
+      if (localStorage.darkMode)
+        this.$vuetify.theme.dark = localStorage.darkMode === 'true'
+    }, 10)
+  },
+  methods: {
+    onDarkModeToggled() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      localStorage.darkMode = this.$vuetify.theme.dark
+    },
+  },
 }
 </script>
