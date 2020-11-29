@@ -14,7 +14,7 @@
     <a href="https://github.com/noemilemonnier/clothing"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://clothingwarehousereaktor.herokuapp.com/">View Demo</a>
   </p>
 </p>
 
@@ -36,12 +36,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started:
-**To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`github_username`, `repo_name`, `twitter_handle`, `email`
-
+This project is to fulfill the technical assignment for Reaktor. It has 4 pages including a home page and the jackets, shirts, accessories pages.
 
 ### Built With
 

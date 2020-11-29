@@ -19,17 +19,17 @@
                             <template v-slot:[`item.name`]="{ item }">
                                 {{ item.name }}
                             </template>
-
                             <template v-slot:[`item.color`]="{ item }">
                                 {{ item.color }}
                             </template>
-
                             <template v-slot:[`item.price`]="{ item }">
                                 {{ item.price }}
                             </template>
-
                             <template v-slot:[`item.manufacturer`]="{ item }">
                                 {{ item.manufacturer }}
+                            </template>
+                            <template v-slot:[`item.availability`]="{ item }">
+                                {{ item.availability }}
                             </template>
 
                         </v-data-table>
@@ -44,9 +44,7 @@
 <script>
 import axios from "axios";
 import { mdiCheckboxBlankOutline } from "@mdi/js";
-import apis from "~/api/index.js"
-const allText = "All";
-let set_manufacturers = new Set()
+import apis from "../api/index"
 
 export default {
     head: () => ({
@@ -55,13 +53,14 @@ export default {
     data: () => ({
         isLoading: true,
         jackets: [],
-        allText,
+        manufacturers: [],
         tableHeaders: [
             { text: "ID", value: "id" },
             { text: "Name", value: "name" },
             { text: "Color", value: "color" },
             { text: "Price", value: "price"},
-            { text: "Manufacturer", value: "manufacturer"}
+            { text: "Manufacturer", value: "manufacturer"},
+            { text: "Availability", value: "availability"}
         ],
         i: {
             mdiCheckboxBlankOutline,
@@ -72,18 +71,11 @@ export default {
     }),
     async mounted() {
         try {
-            let jacket_list = await apis.getJackets();
-            console.log(jacket_list)
-            /* await axios
-                .get("/api/products/jackets")
-                .then((response) => {
-                    this.jackets = response.data
-                    let mySet = new Set(this.jackets)
-                    console.log(this.set_manufacturers)
-                })
-                .catch((error) => {
-                    console.error("There was an error in retrieving jackets!", error);
-                }); */
+            this.jackets = await apis.getJackets();
+            this.jackets.forEach( jacket => {
+                let avail = apis.getAvailability(jacket.manufacturer, jacket.id)
+                jacket.availability = avail
+            })
         } catch (err) {
             if (err.response) {
                 console.error("Could not fetch jackets");
